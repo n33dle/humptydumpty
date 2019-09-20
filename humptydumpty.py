@@ -4,7 +4,7 @@
 # Version: 1 (WORK IN PROGRESS!)
 # Note: This code may suck. Any feedback/suggestions, let me know!
 
-import subprocesss
+import subprocess
 import argparse
 from termcolor import colored
 from pypsexec.client import Client
