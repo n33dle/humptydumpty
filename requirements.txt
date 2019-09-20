@@ -1,0 +1,4 @@
+pypsexec
+subprocess
+argparse
+termcolor
