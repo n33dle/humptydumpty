@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Author: David Roccasalva (@n33dle0x00) 
 # Description: Dumps LSASS on target machines and download the dumpfiles for some offline mimikatz happyfuntimes
-# Version: 1
+# Version: 0.1 (WORK IN PROGRESS)
 # Note: This code may suck. Feel free to make it better :)
 
 import subprocess
