@@ -1,9 +1,9 @@
 # humptydumpty
 
-With administrative credentials, this can be used to dump the lsass.exe proccess on any computer and download the dump file locally, which can then be processed through mimikatz to dump creds.
+With administrative credentials, this can be used to dump the lsass.exe proccess on a remote computer and download the dump file locally, which can then be processed through mimikatz.
 
-Pre-reqs:
-pip3 install -r requirements
+## Installation:
+`pip install -r requirements`
 
-To run:
-python3 humptydumpty.py -u <username> -p <password>
+## How to use:
+`python3 humptydumpty.py -t <hostname/IP> -u <username> -p <password>`
