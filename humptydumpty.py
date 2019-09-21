@@ -50,4 +50,5 @@ To do:
 - Better error handling
 - Add arg for download locaiton (and set default as home drive?)
 - Automate mimikatz at the end, or prompt to run mimikatz or end script
+This is a test
 '''
