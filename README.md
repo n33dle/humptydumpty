@@ -11,6 +11,7 @@ In my testing, some AV will flag the dumping of the lsass process, however, in m
 
 ## How to use:
 *Single target:* `python3 humptydumpty.py -t <hostname/IP> -u <username> -p <password>`
+
 *List of IPs/Hostnames from a file:* `python3 humptydumpty.py -f <filename> -u <username> -p <password>`
 
 By default:
