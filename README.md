@@ -15,5 +15,5 @@ In my testing, some AV will flag the dumping of the lsass process, however, in m
 *List of IPs/Hostnames from a file:* `python3 humptydumpty.py -f <filename> -u <username> -p <password>`
 
 By default:
-* Dumpfiles will be stored in current working directory, use -o to output to a different directory
-* Local authentication is used, use -d to use domain authentication.
+* Dumpfiles will be stored in current working directory, use `-o /dest/dir/` to output to a different directory
+* Local authentication is used, use `-d acme.local` for domain authentication.
