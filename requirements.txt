@@ -1,4 +1,3 @@
 pypsexec
-subprocess
 argparse
 termcolor
