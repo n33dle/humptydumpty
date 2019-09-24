@@ -10,9 +10,9 @@ In my testing, some AV will flag the dumping of the lsass process, however, in m
 `pip3 install -r requirements`
 
 ## How to use:
-*Single target:* `python3 humptydumpty.py -t <hostname/IP> -u <username> -p <password>`
+**Single target:** `python3 humptydumpty.py -t <hostname/IP> -u <username> -p <password>`
 
-*List of IPs/Hostnames from a file:* `python3 humptydumpty.py -f <filename> -u <username> -p <password>`
+**List of IPs/Hostnames from a file:** `python3 humptydumpty.py -f <filename> -u <username> -p <password>`
 
 By default:
 * Dumpfiles will be stored in current working directory, use `-o /dest/dir/` to output to a different directory
