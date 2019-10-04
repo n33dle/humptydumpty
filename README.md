@@ -17,3 +17,7 @@ In my testing, some AV will flag the dumping of the lsass process, however, in m
 By default:
 * Dumpfiles will be stored in current working directory, use `-o /dest/dir/` to output to a different directory
 * Local authentication is used, use `-d acme.local` for domain authentication.
+
+**Automated credential dumping:**
+I've added automated credential dumping with pypykatz (Checkout @skelec awesome project here: https://github.com/skelsec/pypykatz - Thanks!). While it's working well for single targets, there are still issues for targets loaded through a file. For now, my pypykatz implementation does not dump automatically when loading targets from a file.
+If you want to disregard autodumping credentials all together, add the `--dont-dump` option.
