@@ -1,3 +1,4 @@
 pypsexec
 argparse
 termcolor
+pypykatz
